@@ -94,8 +94,8 @@ COPY --chown=root:root motd /etc/
 
 COPY --chown=root:root units /etc/systemd/user/
 
-ARG CUSTOM_PS1='[\u@admin]\$ '
-RUN echo "PS1='$CUSTOM_PS1'" > "/etc/profile.d/bottlerocket-ps1.sh" \
+ARG CUSTOM_PS1='[\u@ether-admin]\$ '
+RUN echo "PS1='$CUSTOM_PS1'" > "/etc/profile.d/ether-ps1.sh" \
     && echo "PS1='$CUSTOM_PS1'" >> "/root/.bashrc" \
     && echo "cat /etc/motd" >> "/root/.bashrc"
 

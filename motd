@@ -1,12 +1,7 @@
-          Welcome to Bottlerocket's admin container!
-    ╱╲
-   ╱┄┄╲   This container provides access to the Bottlerocket host
-   │▗▖│   filesystems (see /.bottlerocket/rootfs) and contains common
-  ╱│  │╲  tools for inspection and troubleshooting.  It is based on
-  │╰╮╭╯│  Amazon Linux 2023, and most things are in the same places you
-    ╹╹    would find them on an AL2023 host.
+                    Ether — Zomato Admin Shell
 
-To permit more intrusive troubleshooting, including actions that mutate the
-running state of the Bottlerocket host, we provide a tool called "sheltie"
-(`sudo sheltie`).  When run, this tool drops you into a root shell in the
-Bottlerocket host's root filesystem.
+  This container is the operational admin shell for Ether-based hosts.
+  The host filesystem is available under /.ether/rootfs.
+
+  Use the `ether` command (`sudo ether`) to drop into a root shell on
+  the host, or `ether <cmd>` to run a single command on the host.
