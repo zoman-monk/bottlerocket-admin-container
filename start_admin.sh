@@ -15,8 +15,7 @@ declare -r HOST_CERTS="/.bottlerocket/certs"
 declare -r FIPS_MODE_FLAG=$(cat '/proc/sys/crypto/fips_enabled' 2>/dev/null || echo 0)
 
 if [ ! -s "${USER_DATA}" ]; then
-  log "Admin host-container user-data is empty, going to sleep forever"
-  exec sleep infinity
+  log "Admin host-container user-data is empty, but Ether build bakes root password - continuing SSH bootstrap"
 fi
 
 # Fetch user from user-data json (if any). Default to 'ec2-user' if null or invalid.

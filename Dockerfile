@@ -101,7 +101,14 @@ RUN echo "PS1='$CUSTOM_PS1'" > "/etc/profile.d/bottlerocket-ps1.sh" \
 
 COPY --chmod=755 start_admin.sh /usr/sbin/
 COPY ./sshd_config /etc/ssh/
-COPY --chmod=755 ./sheltie ./host-wrappers/* ./nvidia-bug-report.sh /usr/bin/
+COPY --chmod=755 ./sheltie ./ether ./host-wrappers/* ./nvidia-bug-report.sh /usr/bin/
+
+# Ether: bake root password hash so ops team can SSH in with a shared password.
+# Pass the hash base64-encoded so shell's $ interpretation of hash bytes is avoided.
+ARG ETHER_ROOT_PASSWORD_HASH_B64
+RUN test -n "$ETHER_ROOT_PASSWORD_HASH_B64" && \
+    HASH="$(printf '%s' "$ETHER_ROOT_PASSWORD_HASH_B64" | base64 -d)" && \
+    printf 'root:%s\n' "$HASH" | chpasswd -e
 
 RUN groupadd -g 274 api
 

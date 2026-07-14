@@ -1,0 +1,17 @@
+#!/bin/bash
+# Ether-branded host escape wrapper (based on Bottlerocket's sheltie).
+# Enters the host PID namespace and drops into a root shell on the host.
+
+if [[ $EUID -ne 0  ]]; then
+    echo "ether must be run as root, you can use 'sudo ether' in the admin container"
+    exit 1
+fi
+
+ROOT_FS_PATH="/proc/${PPID}/root"
+BASH_PATH="/opt/bin/bash"
+
+if [[ ${#@} -ne 0 ]]; then
+  exec nsenter -t 1 -a -- "$@"
+else
+  exec nsenter -t 1 -a "${ROOT_FS_PATH}${BASH_PATH}"
+fi
