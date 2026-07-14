@@ -1,17 +1,20 @@
 #!/bin/bash
-# Ether-branded host escape wrapper (based on Bottlerocket's sheltie).
+# Ether-branded host escape wrapper.
 # Enters the host PID namespace and drops into a root shell on the host.
 
-if [[ $EUID -ne 0  ]]; then
+if [[ $EUID -ne 0 ]]; then
     echo "ether must be run as root, you can use 'sudo ether' in the admin container"
     exit 1
 fi
 
-ROOT_FS_PATH="/proc/${PPID}/root"
-BASH_PATH="/opt/bin/bash"
+# Drop a leading '--' if the caller included it, since nsenter treats that as
+# its own separator and would otherwise try to execute '--' as a command.
+if [[ "${1:-}" == "--" ]]; then
+    shift
+fi
 
-if [[ ${#@} -ne 0 ]]; then
-  exec nsenter -t 1 -a -- "$@"
+if [[ $# -ne 0 ]]; then
+    exec nsenter -t 1 -a -- "$@"
 else
-  exec nsenter -t 1 -a "${ROOT_FS_PATH}${BASH_PATH}"
+    exec nsenter -t 1 -a /opt/bin/bash
 fi
